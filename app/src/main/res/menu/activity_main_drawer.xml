@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/Default"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_audio"
+            android:icon="@drawable/ic_library_music_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="@string/nav_audio" />
+        <item
+            android:id="@+id/nav_image"
+            android:icon="@drawable/ic_photo_library_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="@string/nav_image" />
+        <item
+            android:id="@+id/nav_video"
+            android:icon="@drawable/ic_photo_library_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="@string/nav_video" />
+        <item
+            android:id="@+id/nav_download"
+            android:icon="@drawable/ic_file_download_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="@string/nav_download" />
+    </group>
+    <group android:id="@+id/Storage"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_local"
+            android:icon="@drawable/ic_storage_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="@string/nav_local" />
+        <item
+            android:id="@+id/nav_sdcard"
+            android:icon="@drawable/ic_sd_storage_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="@string/nav_sdcard" />
+        <item
+            android:id="@+id/nav_network"
+            android:icon="@drawable/ic_devices_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="@string/nav_network" />
+    </group>
+
+    <group android:id="@+id/setting"
+        android:checkableBehavior="single" >
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/nav_setting" />
+    </group>
+
+</menu>

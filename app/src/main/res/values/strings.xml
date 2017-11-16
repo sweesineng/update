@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">NetDrive</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- For Navigation Drawer -->
+    <string name="nav_video">Videos</string>
+    <string name="nav_image">Images</string>
+    <string name="nav_audio">Audio</string>
+    <string name="nav_download">Downloads</string>
+    <string name="nav_local">Local Storage</string>
+    <string name="nav_sdcard">External SD</string>
+    <string name="nav_network">Network</string>
+    <string name="nav_setting">Settings</string>
+    <!-- For Toolbar Menu -->
+    <string name="action_search">Search</string>
+    <string name="action_view">View</string>
+    <string name="action_sortName">SortBy Name</string>
+    <string name="action_sortSize">SortBy Size</string>
+    <!-- For Floating Action Button -->
+    <string name="float_new_folder">New Folder</string>
+    <string name="float_new_file">New File</string>
+    <!-- For RecyclerView Fragment -->
+    <string name="noItem">No Item</string>
+    <!-- For RecyclerView BreadCrumbs -->
+    <string name="divider">">"</string>
+</resources>
