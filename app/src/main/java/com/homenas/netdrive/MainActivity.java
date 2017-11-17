@@ -43,7 +43,7 @@ import static com.homenas.netdrive.Constants.curFiles;
 import static com.homenas.netdrive.Constants.fabExpanded;
 import static com.homenas.netdrive.Constants.permission;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     public interface OnBackPressedListener {
         void doBack();
@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
         // Set the first MenuItem title for Actionbar title
         if(getSupportActionBar() != null) {
             getSupportActionBar().setTitle(navigationView.getMenu().getItem(4).getTitle().toString());
@@ -120,35 +119,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
         checkExtStorage();
         showExtStorage();
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_audio) {
-            // Handle the camera action
-        } else if (id == R.id.nav_image) {
-
-        } else if (id == R.id.nav_video) {
-
-        } else if (id == R.id.nav_download) {
-
-        } else if (id == R.id.nav_local) {
-            mRecyclerViewFragment.initItemList();
-        } else if (id == R.id.nav_sdcard) {
-            mRecyclerViewFragment.getExtStorage();
-        } else if (id == R.id.nav_network) {
-
-        } else if (id == R.id.nav_setting) {
-
-        }
-        updateTitle(item.getTitle().toString());
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     @Override
@@ -197,12 +167,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Drawable menuDrawable = item.getIcon();
         Drawable wrapDrawable = DrawableCompat.wrap(menuDrawable);
         DrawableCompat.setTint(wrapDrawable, ContextCompat.getColor(context,color));
-    }
-
-    private void updateTitle(String title) {
-        if(getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(title);
-        }
     }
 
     private void initFrag() {

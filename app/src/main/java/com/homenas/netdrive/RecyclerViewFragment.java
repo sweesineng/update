@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.provider.DocumentFile;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -16,6 +20,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -40,7 +45,7 @@ import static com.homenas.netdrive.R.id.recyclerView;
  */
 
 public class RecyclerViewFragment extends Fragment
-        implements CustomAdapter.CustomAdapterListener, MainActivity.OnBackPressedListener, BreadcrumbsAdapter.BreadcrumbsAdapterListener {
+        implements CustomAdapter.CustomAdapterListener, MainActivity.OnBackPressedListener, BreadcrumbsAdapter.BreadcrumbsAdapterListener, NavigationView.OnNavigationItemSelectedListener {
 
     private final String TAG = getClass().getSimpleName();
     private CustomAdapter mAdapter;
@@ -86,6 +91,8 @@ public class RecyclerViewFragment extends Fragment
             mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
                     .getSerializable(KEY_LAYOUT_MANAGER);
         }
+        NavigationView navigationView = (NavigationView) ((AppCompatActivity)getActivity()).findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
 
         brecyclerView = (RecyclerView) ((AppCompatActivity)getActivity()).findViewById(R.id.breadcrumbs);
@@ -114,6 +121,35 @@ public class RecyclerViewFragment extends Fragment
                 closeFabSubMenu();
             }
         });
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_audio) {
+            // Handle the camera action
+        } else if (id == R.id.nav_image) {
+
+        } else if (id == R.id.nav_video) {
+
+        } else if (id == R.id.nav_download) {
+
+        } else if (id == R.id.nav_local) {
+            initItemList();
+        } else if (id == R.id.nav_sdcard) {
+            getExtStorage();
+        } else if (id == R.id.nav_network) {
+
+        } else if (id == R.id.nav_setting) {
+
+        }
+        updateTitle(item.getTitle().toString());
+        DrawerLayout drawer = (DrawerLayout) ((AppCompatActivity)getActivity()).findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void initItemList() {
@@ -210,7 +246,11 @@ public class RecyclerViewFragment extends Fragment
         }
     }
 
-
+    private void updateTitle(String title) {
+        if(((AppCompatActivity)getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(title);
+        }
+    }
 
     public void getExtStorage() {
         StorageManager mStorageManager = getActivity().getSystemService(StorageManager.class);
