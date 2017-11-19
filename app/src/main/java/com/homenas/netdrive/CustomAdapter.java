@@ -23,7 +23,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     private final String TAG = getClass().getSimpleName();
     private Context mContext;
     private CustomAdapterListener mListener;
-    private List<FilesData> mDataSet;
+    private List<SmbData> mDataSet;
     private boolean mViewGrid;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -47,7 +47,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         }
     }
 
-    public CustomAdapter(Context context, List<FilesData> dataSet, CustomAdapterListener listener) {
+    public CustomAdapter(Context context, List<SmbData> dataSet, CustomAdapterListener listener) {
         mContext = context;
         mDataSet = dataSet;
         this.mListener = listener;
@@ -68,7 +68,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
-        viewHolder.getTextView().setText(mDataSet.get(position).getDocName());
+        viewHolder.getTextView().setText(mDataSet.get(position).getObjName());
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.homenas.netdrive;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
@@ -19,7 +18,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,12 +25,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import jcifs.smb.SmbException;
-import jcifs.smb.SmbFile;
 
 import static com.homenas.netdrive.Constants.KEY_LAYOUT_MANAGER;
 import static com.homenas.netdrive.Constants.LayoutManagerType;
@@ -47,11 +41,11 @@ import static com.homenas.netdrive.R.id.recyclerView;
  * Created by engss on 24/10/2017.
  */
 
-public class RecyclerViewFragment extends Fragment
+public class RecyclerViewFragment1 extends Fragment
         implements CustomAdapter.CustomAdapterListener, MainActivity.OnBackPressedListener, BreadcrumbsAdapter.BreadcrumbsAdapterListener, NavigationView.OnNavigationItemSelectedListener {
 
     private final String TAG = getClass().getSimpleName();
-    public CustomAdapter mAdapter;
+    private CustomAdapter mAdapter;
     private BreadcrumbsAdapter bAdapter;
     private RecyclerView mRecyclerView;
     private RecyclerView brecyclerView;
@@ -59,17 +53,17 @@ public class RecyclerViewFragment extends Fragment
     private RecyclerView.LayoutManager mLayoutManager;
     private FrameLayout mPopMenu;
 
-    public List<SmbData> mDataset = new ArrayList<>();
-    private List<SmbData> mCrumbs = new ArrayList<>();
+    private List<FilesData> mDataset = new ArrayList<>();
+    private List<DocumentFile> mCrumbs = new ArrayList<>();
     public Boolean viewGrid = true;
-    private Object curRoot;
+    private DocumentFile curRoot;
     private int curCrumb = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new CustomAdapter(getActivity(), mDataset, this);
-//        bAdapter = new BreadcrumbsAdapter(mCrumbs, this);
+//        mAdapter = new CustomAdapter(getActivity(), mDataset, this);
+        bAdapter = new BreadcrumbsAdapter(mCrumbs, this);
         ((MainActivity) getActivity()).setOnBackPressedListener(this);
     }
 
@@ -102,7 +96,7 @@ public class RecyclerViewFragment extends Fragment
         mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         brecyclerView.setLayoutManager(mLayoutManager);
         brecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        bAdapter = new BreadcrumbsAdapter(mCrumbs, this);
+        bAdapter = new BreadcrumbsAdapter(mCrumbs, this);
         brecyclerView.setAdapter(bAdapter);
         initItemList();
 
@@ -145,7 +139,7 @@ public class RecyclerViewFragment extends Fragment
         } else if (id == R.id.nav_sdcard) {
             getExtStorage();
         } else if (id == R.id.nav_network) {
-            new getSmb().execute();
+
         } else if (id == R.id.nav_setting) {
 
         }
@@ -161,7 +155,7 @@ public class RecyclerViewFragment extends Fragment
         updateData(curRoot);
     }
 
-    public void setRecyclerViewLayoutManager(Constants.LayoutManagerType layoutManagerType) {
+    public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
         int scrollPosition = 0;
 
         // If a layout manager has already been set, get current scroll position.
@@ -196,47 +190,57 @@ public class RecyclerViewFragment extends Fragment
     @Override
     public void onItemClick(int position){
 //        Toast.makeText(getActivity(), "click at " + mDataset.get(position), Toast.LENGTH_SHORT).show();
-//        updateData(mDataset.get(position).getObj());
+        updateData(mDataset.get(position).getDoc());
     }
 
     @Override
     public void onCrumbClick(int position){
         mCrumbs.subList(position + 1,mCrumbs.size()).clear();
-//        updateData(mCrumbs.get(mCrumbs.size() -1));
+        updateData(mCrumbs.get(mCrumbs.size() -1));
     }
 
     @Override
     public void doBack() {
-//        SmbData o1 = new SmbData(curFiles);
-//        SmbData o2 = new SmbData(curRoot);
-//        if(o1.getObjName().equals(o2.getObjName())) {
+////        if(curFiles.getUri().toString().equals(curRoot.getUri().toString())) {
 //            Toast.makeText(getActivity(), "At root ", Toast.LENGTH_SHORT).show();
 //        }else{
 //            mCrumbs.remove(curFiles);
-//            updateData(o1.getParent());
+////            updateData(curFiles.getParentFile());
 //            mAdapter.notifyDataSetChanged();
 //        }
     }
 
-    public void updateData(Object Obj){
-        if(isDocument(Obj)){
-            for(Object file : ((DocumentFile) Obj).listFiles()){
-                SmbData data = new SmbData(file);
-                mDataset.add(data);
-            }
-        }
-        if(isSmb(Obj)){
-            Log.i(TAG, "result: " );
-            try {
-                for(Object file : ((SmbFile) Obj).listFiles()){
-                    SmbData data = new SmbData(file);
-                    mDataset.add(data);
-                }
-            } catch (SmbException e) {
-                e.printStackTrace();
-            }
-        }
-        mAdapter.notifyDataSetChanged();
+    public void updateData(DocumentFile files) {
+//        if(files.isDirectory()) {
+//            mDataset.clear();
+//            curFiles = files;
+//            if(mCrumbs.size() != 0) {
+//                if(!mCrumbs.get(mCrumbs.size()-1).getName().equals(curFiles.getName())) {
+//                    mCrumbs.add(curFiles);
+//                    bAdapter.notifyItemInserted(mCrumbs.size());
+//                    curCrumb = mCrumbs.size();
+//                }else{
+//                    bAdapter.notifyItemRangeRemoved(mCrumbs.size(),curCrumb-mCrumbs.size());
+//                }
+//                brecyclerView.smoothScrollToPosition(mCrumbs.size()-1);
+//            }else{
+//                mCrumbs.add(curFiles);
+//                bAdapter.notifyDataSetChanged();
+//                curCrumb = mCrumbs.size();
+//            }
+//            for(DocumentFile file : files.listFiles()) {
+//                FilesData data = new FilesData(file, Constants.Sortby, Constants.Accending);
+//                mDataset.add(data);
+//            }
+//            final ConstraintLayout noItem = (ConstraintLayout) getActivity().findViewById(R.id.noItem);
+//            if(mDataset.size() == 0) {
+//                noItem.setVisibility(View.VISIBLE);
+//            }else{
+//                noItem.setVisibility(View.INVISIBLE);
+//            }
+//            Collections.sort(mDataset,FilesData.Comparators.Sort);
+//            mAdapter.notifyDataSetChanged();
+//        }
     }
 
     private void updateTitle(String title) {
@@ -267,7 +271,7 @@ public class RecyclerViewFragment extends Fragment
                 Constants.ExtStorage = DocumentFile.fromTreeUri(getActivity(),data.getData());
                 curRoot = Constants.ExtStorage;
                 mCrumbs.clear();
-//                updateData(Constants.ExtStorage);
+                updateData(Constants.ExtStorage);
             }
         }
     }
@@ -280,43 +284,5 @@ public class RecyclerViewFragment extends Fragment
     public void openFabSubMenu() {
         mPopMenu.setVisibility(View.VISIBLE);
         fabExpanded = true;
-    }
-
-    private boolean isSmb(Object Obj){
-        return (Obj instanceof SmbFile) ? true:false;
-    }
-
-    private boolean isDocument(Object Obj){
-        return (Obj instanceof DocumentFile) ? true:false;
-    }
-
-    private class getSmb extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object... arg0) {
-            jcifs.Config.setProperty("jcifs.netbios.baddr", "192.168.0.255");
-            try {
-                SmbFile root = new SmbFile("smb://");
-                if(root.exists()){
-                    mDataset.clear();
-                    for(Object file : ((SmbFile) root).listFiles()){
-                        SmbData data = new SmbData(file);
-                        mDataset.add(data);
-                    }
-                    return mDataset;
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (SmbException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object result) {
-            RecyclerViewFragment mRecyclerViewFragment = (RecyclerViewFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.container);
-            Log.i(TAG, "Asynctask: Here");
-            mRecyclerViewFragment.mAdapter.notifyDataSetChanged();
-        }
     }
 }

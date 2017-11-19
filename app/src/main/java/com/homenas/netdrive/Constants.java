@@ -35,10 +35,16 @@ public class Constants {
 
     public static boolean Accending = true;
 
-    public static DocumentFile curFiles = null;
+    public static Object curFiles = null;
 
     public static String IPAddress = null;
 
     public static String BcastAddress = null;
+
+    public static final String SortName = "FileName";
+
+    public static final String SortSize = "FileSize";
+
+    public static final String SortDate = "FileDate";
 
 }

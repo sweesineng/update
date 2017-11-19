@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.storage.StorageManager;
@@ -32,11 +31,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-import java.net.MalformedURLException;
 import java.util.List;
-
-import jcifs.smb.SmbException;
-import jcifs.smb.SmbFile;
 
 import static com.homenas.netdrive.Constants.PERMISSIONS_REQUEST_CODE;
 import static com.homenas.netdrive.Constants.curFiles;
@@ -237,27 +232,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
-    }
-
-    private class getSmb extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object... arg0) {
-            jcifs.Config.setProperty("jcifs.netbios.baddr", "192.168.174.255");
-            try {
-                SmbFile root = new SmbFile("smb://");
-                if(root.exists()){
-                    SmbFile[] list = root.listFiles();
-                    for(SmbFile f:list) {
-                        Log.i(TAG, "Folder: " + f.getName());
-                    }
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (SmbException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
     }
 
 }
